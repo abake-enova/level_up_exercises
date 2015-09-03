@@ -1,5 +1,4 @@
 class DecksController < ApplicationController
-  include DecksHelper
   def new
     @deck = current_user.decks.build
   end
