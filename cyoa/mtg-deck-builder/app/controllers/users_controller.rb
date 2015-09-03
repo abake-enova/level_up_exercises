@@ -16,8 +16,8 @@ class UsersController < ApplicationController
   def update
     @user = current_user
     if @user.update_attributes(user_params)
-      flash[:success] = "Awesome! Your profile has been updated."
-      redirect_to @user
+      success_message = "Awesome! Your profile has been updated."
+      redirect_to @user, flash: { success: success_message }
     else
       render 'edit'
     end
@@ -27,17 +27,16 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       log_in @user
-      flash[:success] = "Woohoo! Welcome to MTG Deck builder!"
-      redirect_to @user
+      success_message = "Woohoo! Welcome to MTG Deck builder!"
+      redirect_to @user, flash: { success: success_message }
     else
       render 'new'
     end
   end
 
   def destroy
-    flash[:success] = "Your account has been destroyed."
     current_user.destroy
-    redirect_to "/"
+    redirect_to "/", flash: { success: "Your account has been destroyed." }
   end
 
   private
@@ -52,8 +51,7 @@ class UsersController < ApplicationController
 
   def require_logged_in
     unless logged_in?
-      flash[:error] = "Oops! You need to log in."
-      redirect_to login_url
+      redirect_to login_url, flash: { error: "Oops! You need to log in." }
     end
   end
 end

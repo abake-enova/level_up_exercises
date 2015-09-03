@@ -10,8 +10,8 @@ class DecksController < ApplicationController
   def create
     @deck = current_user.decks.build(deck_params)
     if @deck.save
-      flash[:success] = "Your deck #{@deck.name} has been created."
-      redirect_to @deck.user
+      success_message = "Your deck #{@deck.name} has been created."
+      redirect_to @deck.user, flash: { success: success_message }
     else
       render 'new'
     end
@@ -24,9 +24,9 @@ class DecksController < ApplicationController
 
   def destroy
     deck = Deck.find(params[:id])
-    flash[:success] = "Your deck #{deck.name} has been destroyed."
     deck.destroy
-    redirect_to current_user
+    success_message = "Your deck #{deck.name} has been destroyed."
+    redirect_to current_user, flash: { success: success_message }
   end
 
   private
