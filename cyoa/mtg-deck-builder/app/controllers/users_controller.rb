@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :require_logged_in, only: [:edit, :update]
+
   def show
     @user = User.find(params[:id])
     @decks = @user.decks.paginate(page: params[:page])
