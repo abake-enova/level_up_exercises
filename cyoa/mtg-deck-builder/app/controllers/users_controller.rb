@@ -16,7 +16,7 @@ class UsersController < ApplicationController
 
   def update
     @user = current_user
-    if @user.update_attributes(user_params)
+    if @user.update(user_params)
       success_message = "Awesome! Your profile has been updated."
       redirect_to @user, flash: { success: success_message }
     else
