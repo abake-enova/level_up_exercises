@@ -12,7 +12,7 @@ class CardsDecksController < ApplicationController
     deck_id = params[:deck_id]
     card_id = params[:card_id]
     @cards_deck = CardsDeck.where(deck_id: deck_id, card_id: card_id).first
-    return head :ok if @cards_deck.number_in_deck == 0
+    return head :ok if @cards_deck.number_in_deck.zero?
     @cards_deck.update_attributes(number_in_deck: @cards_deck.number_in_deck - 1)
   end
 end
