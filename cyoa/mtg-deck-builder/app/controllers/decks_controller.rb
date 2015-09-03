@@ -5,6 +5,7 @@ class DecksController < ApplicationController
 
   def show
     @deck = Deck.find(params[:id])
+    @cards_in_deck = Card.group_by_type(@deck.cards)
   end
 
   def create
@@ -20,6 +21,7 @@ class DecksController < ApplicationController
   def edit
     @cards = Card.search(params).paginate(page: params[:page], per_page: 100)
     @deck = Deck.find(params[:id])
+    @cards_in_deck = Card.group_by_type(@deck.cards)
   end
 
   def destroy

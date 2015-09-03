@@ -8,6 +8,16 @@ class Card < ActiveRecord::Base
   serialize :supertypes
   serialize :subtypes
 
+  TYPE_ORDERING = %w(
+    creature
+    enchantment
+    instant
+    sorcery
+    land
+    artifact
+    planeswalker
+  )
+
   def self.search(params)
     cards = where(nil)
     cards = where('name LIKE ?', "%#{params[:cardname]}%") if params[:cardname]
@@ -77,5 +87,15 @@ class Card < ActiveRecord::Base
       INNER JOIN types ON types.id = cards_types.type_id
       GROUP BY cards.name #{having_types}"
     cards.where(id: connection.execute(query).map { |result| result["id"] })
+  end
+
+  def self.group_by_type(cards)
+    groups = Hash.new { |h, k| h[k] = [] }
+    TYPE_ORDERING.each do |type|
+      groups[type] = cards.select { |card| card.types.map(&:name).include?(type) }
+      groups[type].each { |card| cards -= [card] }
+    end
+    cards.each { |card| groups["other"] << card }
+    groups
   end
 end

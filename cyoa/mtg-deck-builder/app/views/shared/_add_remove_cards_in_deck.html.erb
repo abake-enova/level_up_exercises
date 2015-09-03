@@ -6,7 +6,7 @@
   class: "add") %>
 
 <span class="number-in-deck>">
-  <%= find_number_of_card_in_deck(deck_id, card_id) %>
+  <%= Deck.find(deck_id).number_of_card_in_deck(Card.find(card_id)) %>
 </span>
 
 <%= link_to(

@@ -1,6 +1,6 @@
 <% provide(:title, "#{@deck.name}") %>
 <div class="divide cards-in-deck">
-  <%= render 'cards_in_deck', deck: @deck %>
+  <%= render 'cards_in_deck', deck: @deck, cards_in_deck: @cards_in_deck %>
 </div>
 <div class="divide">
   <%= link_to "Edit Deck", edit_deck_path(@deck), class: "btn" %>

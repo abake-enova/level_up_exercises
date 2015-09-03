@@ -1,10 +1,12 @@
-<h2>Currently in your deck (<%= total_number_of_card_subset_in_deck(deck, deck.cards) %>):</h2> 
-<% organize_cards_by_type(non_zero_cards_in_deck(deck)).each do |type, cards| %>
+<h2>Currently in your deck (<%= deck.count_cards_in_deck %>):</h2>
+<% cards_in_deck.each do |type, cards| %>
   <% next unless cards.count > 0 %>
   <div class="cards-type-group">
-    <h3><%= type.capitalize.pluralize %> (<%= total_number_of_card_subset_in_deck(deck, cards) %>)</h3>
+    <h3><%= type.capitalize.pluralize %> (<%= deck.count_card_subset(cards) %>)</h3>
     <% cards.each do |card| %>
-      <%= render 'decks/card_in_deck', card: card, deck_id: deck.id %>
+      <% if deck.number_of_card_in_deck(card) > 0 %>
+        <%= render 'decks/card_in_deck', card: card, deck_id: deck.id %>
+      <% end %>
     <% end %>
   </div>
 <% end %>

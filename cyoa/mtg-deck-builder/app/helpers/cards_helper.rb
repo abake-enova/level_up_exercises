@@ -1,13 +1,4 @@
 module CardsHelper
-  TYPE_ORDERING = %w(
-    creature
-    enchantment
-    instant
-    sorcery
-    land
-    artifact
-    planeswalker)
-
   SYMBOL_TO_CLASS = {
     "W" => 'ms-w',
     "B" => 'ms-b',
@@ -63,15 +54,5 @@ module CardsHelper
   def types_to_html(card_types)
     return unless card_types
     card_types.map(&:name).join(', ')
-  end
-
-  def organize_cards_by_type(cards)
-    groups = Hash.new { |h, k| h[k] = [] }
-    TYPE_ORDERING.each do |type|
-      groups[type] = cards.select { |card| card.types.map(&:name).include?(type) }
-      groups[type].each { |card| cards -= [card] }
-    end
-    cards.each { |card| groups["other"] << card }
-    groups
   end
 end
