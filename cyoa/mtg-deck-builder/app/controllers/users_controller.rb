@@ -37,7 +37,8 @@ class UsersController < ApplicationController
 
   def destroy
     current_user.destroy
-    redirect_to "/", flash: { success: "Your account has been destroyed." }
+    success_message = "Your account has been destroyed."
+    redirect_to root_path, flash: { success: success_message }
   end
 
   private
