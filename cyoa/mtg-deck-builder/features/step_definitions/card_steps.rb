@@ -91,17 +91,17 @@ When(/^I search for pherexian mana cards$/) do
 end
 
 # TODO: Fix cmc tests.
-When(/^I search for cards with cmc greater than or equal to (.*)$/) do |cmc|
+When(/^I search for cards with converted mana cost greater than or equal to (.*)$/) do |cmc|
   fill_in "minmana", with: cmc
   find("#minmana", match: :first).native.send_keys(:return)
 end
 
-When(/^I search for cards with cmc less than or equal to (.*)$/) do |cmc|
+When(/^I search for cards with converted mana cost less than or equal to (.*)$/) do |cmc|
   fill_in "maxmana", with: cmc
   find("#maxmana", match: :first).native.send_keys(:return)
 end
 
-When(/^I search for cards with cmc equal to (.*)$/) do |cmc|
+When(/^I search for cards with converted mana cost equal to (.*)$/) do |cmc|
   fill_in "exactmana", with: cmc
   find("#exactmana", match: :first).native.send_keys(:return)
 end
@@ -157,19 +157,19 @@ Then(/^I will only see cards with pherexian mana$/) do
   end
 end
 
-Then(/^I will only see cards with cmc greater than or equal to (.*)$/) do |cmc|
+Then(/^I will only see cards with converted mana cost greater than or equal to (.*)$/) do |cmc|
   search_results.each do |card|
     expect(card.cmc).to be >= cmc
   end
 end
 
-Then(/^I will only see cards with cmc less than or equal to (.*)$/) do |cmc|
+Then(/^I will only see cards with converted mana cost less than or equal to (.*)$/) do |cmc|
   search_results.each do |card|
     expect(card.cmc).to be <= cmc
   end
 end
 
-Then(/^I will only see cards with cmc equal to (.*)$/) do |cmc|
+Then(/^I will only see cards with converted mana cost equal to (.*)$/) do |cmc|
   search_results.each do |card|
     expect(card.cmc).to eq(cmc)
   end

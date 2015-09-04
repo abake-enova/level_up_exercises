@@ -3,13 +3,14 @@ Feature: Logging in and logging out
   As a MTG player
   I should be able to log in and log out
 
-  Scenario: Log in
+  Background: Create user
     Given I created a user
+
+  Scenario: Log in
     When I log in
     Then I should be logged in
 
   Scenario: Log Out
-    Given I created a user
-    And I log in
+    Given I log in
     When I log out
     Then I should be logged out

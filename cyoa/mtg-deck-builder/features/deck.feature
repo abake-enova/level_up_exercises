@@ -8,19 +8,19 @@ Feature: Create/Edit decks
     And there are 10 cards in the database
 
   Scenario: Create Deck
-    And I visit the create deck page
+    Given I visit the create deck page
     When I create a deck named "BestDeckEvar"
     Then I expect to have 1 deck named "BestDeckEvar"
 
   Scenario: Destroy Deck
-    And I visit the create deck page
+    Given I visit the create deck page
     And I create a deck named "BestDeckEvar"
     When I destroy the deck named "BestDeckEvar"
     Then I expect to not have a deck named "BestDeckEvar"
 
   @javascript
   Scenario: Add a card to deck
-    And I create a deck
+    Given I create a deck
     And I visit the edit deck page
     When I add a card with id 1
     Then I expect to have 1 cards in my deck
@@ -28,7 +28,7 @@ Feature: Create/Edit decks
 
   @javascript
   Scenario: Remove 1 card from deck
-    And I create a deck
+    Given I create a deck
     And I visit the edit deck page
     And I add a card with id 1
     When I remove a card with id 1
@@ -36,7 +36,7 @@ Feature: Create/Edit decks
 
   @javascript
   Scenario: Add different cards to deck
-    And I create a deck
+    Given I create a deck
     And I visit the edit deck page
     When I add a card with id 1
       And I add a card with id 2
@@ -46,7 +46,7 @@ Feature: Create/Edit decks
 
   @javascript
   Scenario: Add different cards to deck and remove only one of them
-    And I create a deck
+    Given I create a deck
     And I visit the edit deck page
     And I add a card with id 1
     And I add a card with id 2
