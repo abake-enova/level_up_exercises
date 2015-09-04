@@ -22,63 +22,85 @@ class Card < ActiveRecord::Base
   )
 
   def self.search(params)
-    cards = where(nil)
-    cards = where('name LIKE ?', "%#{params[:cardname]}%") if params[:cardname]
-    cards = where_colors(cards, params[:cardcolors]) if params[:cardcolors]
-    cards = where_colors_exclude(cards, params[:cardcolors]) if params[:exclude]
-    cards = where_colors_multicolor(cards) if params[:multicolor]
-    cards = where_colors_hybrid(cards) if params[:hybrid]
-    cards = where_colors_pherexian(cards) if params[:pherexian]
-    cards = where_mana_gt(cards, params[:minmana]) if params[:minmana]
-    cards = where_mana_lt(cards, params[:maxmana]) if params[:maxmana]
-    cards = where_text(cards, params[:cardtext]) if params[:cardtext]
-    cards = where_types(cards, params[:cardtypes]) if params[:cardtypes]
-    cards
+    where_name_like(params[:cardname]).
+    where_has_colors(params[:cardcolors]).
+    where_colors_exclude(params[:cardcolors], params[:exclude]).
+    where_colors_multicolor(params[:multicolor]).
+    where_colors_hybrid(params[:hybrid]).
+    where_colors_pherexian(params[:pherexian]).
+    where_mana_gt(params[:minmana]).
+    where_mana_lt(params[:maxmana]).
+    where_text_contains_keywords(params[:cardtext]).
+    where_has_types(params[:cardtypes])
   end
 
-  def self.where_mana_gt(cards, min)
-    cards.where('cmc >= ?', Integer(min))
+  def self.where_name_like(cardname)
+    current_scope = where(nil)
+    return current_scope if cardname.blank?
+    where('name LIKE ?', "%#{cardname}%")
   end
 
-  def self.where_mana_lt(cards, max)
-    cards.where('cmc <= ?', Integer(max))
+  def self.where_mana_gt(min)
+    current_scope = where(nil)
+    return current_scope if min.blank?
+    where('cmc >= ?', Integer(min))
   end
 
-  def self.where_colors_pherexian(cards)
-    cards.where('cost LIKE ?', "%P%")
+  def self.where_mana_lt(max)
+    current_scope = where(nil)
+    return current_scope if max.blank?
+    where('cmc <= ?', Integer(max))
   end
 
-  def self.where_colors_exclude(cards, colors)
+  def self.where_colors_pherexian(in_params)
+    current_scope = where(nil)
+    return current_scope if in_params.blank?
+    where('cost LIKE ?', "%P%")
+  end
+
+  def self.where_colors_exclude(colors, in_params)
+    current_scope = where(nil)
+    return current_scope if in_params.blank?
     colors_to_exclude = %w(black blue green red white) - colors
     colors_to_exclude.each do |color|
-      cards = cards.where('colors NOT LIKE ?', "%#{color}%")
+      current_scope = current_scope.where('colors NOT LIKE ?', "%#{color}%")
     end
-    cards
+    current_scope
   end
 
-  def self.where_colors_multicolor(cards)
-    cards.where('colors LIKE ?', "%- %- %")
+  def self.where_colors_multicolor(in_params)
+    current_scope = where(nil)
+    return current_scope if in_params.blank?
+    where('colors LIKE ?', "%- %- %")
   end
 
-  def self.where_colors_hybrid(cards)
-    cards.where('cost LIKE ?', "%/%")
+  def self.where_colors_hybrid(in_params)
+    current_scope = where(nil)
+    return current_scope if in_params.blank?
+    where('cost LIKE ?', "%/%")
   end
 
-  def self.where_colors(cards, colors)
+  def self.where_has_colors(colors)
+    current_scope = where(nil)
+    return current_scope if colors.blank?
     colors.each do |color|
-      cards = cards.where('colors LIKE ?', "%#{color}%")
+      current_scope = current_scope.where('colors LIKE ?', "%#{color}%")
     end
-    cards
+    current_scope
   end
 
-  def self.where_text(cards, keywords)
+  def self.where_text_contains_keywords(keywords)
+    current_scope = where(nil)
+    return current_scope if keywords.blank?
     keywords.each do |keyword|
-      cards = cards.where('text LIKE ?', "%#{keyword}%")
+      current_scope = current_scope.where('text LIKE ?', "%#{keyword}%")
     end
-    cards
+    current_scope
   end
 
-  def self.where_types(cards, types)
+  def self.where_has_types(types)
+    current_scope = where(nil)
+    return current_scope if types.blank?
     types_group  = "GROUP_CONCAT(types.name)"
     having_types = "HAVING #{types_group} LIKE '%#{types.pop}%' "
     types.each do |type|
@@ -89,7 +111,7 @@ class Card < ActiveRecord::Base
       INNER JOIN cards_types ON cards.id = cards_types.card_id
       INNER JOIN types ON types.id = cards_types.type_id
       GROUP BY cards.name #{having_types}"
-    cards.where(id: connection.execute(query).map { |result| result["id"] })
+    where(id: connection.execute(query).map { |result| result["id"] })
   end
 
   def self.group_by_type(cards)
