@@ -1,7 +1,10 @@
 class Card < ActiveRecord::Base
-  has_and_belongs_to_many :decks
-  has_and_belongs_to_many :types
-  has_and_belongs_to_many :mtg_sets
+  has_many :cards_decks
+  has_many :decks, through: :cards_decks
+  has_many :cards_types
+  has_many :types, through: :cards_types
+  has_many :cards_mtg_sets
+  has_many :mtg_sets, through: :cards_mtg_sets
   validates :name, presence: true,
                    uniqueness: true
   serialize :colors

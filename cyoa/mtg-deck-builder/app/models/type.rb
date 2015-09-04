@@ -1,5 +1,6 @@
 class Type < ActiveRecord::Base
-  has_and_belongs_to_many :cards
+  has_many :cards_types
+  has_many :cards, through: :cards_types
   validates :name, presence: true,
                    uniqueness: true
 end

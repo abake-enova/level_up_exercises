@@ -1,5 +1,6 @@
 class Deck < ActiveRecord::Base
-  has_and_belongs_to_many :cards
+  has_many :cards_decks
+  has_many :cards, through: :cards_decks
   belongs_to :user
   validates :user_id, presence: true
   validates :name, presence: true
