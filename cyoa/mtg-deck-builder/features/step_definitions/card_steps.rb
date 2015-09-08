@@ -57,7 +57,7 @@ When(/^I visit the card search page$/) do
 end
 
 When(/^I hover over a card's tooltip icon$/) do
-  pending # TODO: Fix card tooltip test.
+  sleep(0.2) # TODO: Find a better solution. This is the only way I could make it work.
   execute_script('$($(".show-card-tooltip")[0]).mouseover()')
   @card_id = evaluate_script("$($('.card')[0]).data('card-id')")
 end
@@ -120,7 +120,6 @@ When(/^I search for cards with converted mana cost equal to (.*)$/) do |cmc|
 end
 
 Then(/^I will see the tooltip for that card$/) do
-  pending # TODO: Fix card tooltip test.
   expect(page).to have_selector(".card-tooltip[data-card-id='#{@card_id}']")
 end
 
