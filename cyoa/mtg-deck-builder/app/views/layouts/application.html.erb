@@ -5,9 +5,7 @@
     <%= render "shared/top_nav" %>
   </div>
 
-  <% flash.each do |message_type, message| %>
-    <div class="panel alert <%= message_type %>"><%= message %></div>
-  <% end %>
+  <%= render 'shared/flash_messages', flash: flash %>
 
   <div id="wrapper">
     <%= yield %>
