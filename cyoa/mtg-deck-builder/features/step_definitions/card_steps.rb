@@ -34,6 +34,7 @@ Given(/^there is a card with pherexian mana$/) do
   @card = create(:card, cost: "{P/W}")
 end
 
+# TODO: Change so that CardsType are created with FactoryGirl.
 Given(/^there is a card with type "(.*)" in the database$/) do |card_type|
   @card = create(:card)
   @type = create(:type, name: card_type)
