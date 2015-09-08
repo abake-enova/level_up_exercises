@@ -59,14 +59,18 @@ When(/^I search for the card named "(.*)"$/) do |card_name|
   fill_in 'cardname', with: card_name
 end
 
-When(/^I search for cards with type "(.*)"$/) do |card_type|
+When(/^I search for cards with types "(.*)"$/) do |card_types|
   find('#types')
-  execute_script("$('#types').tagit('createTag', '#{card_type}')")
+  card_types.split(',').each do |card_type|
+    execute_script("$('#types').tagit('createTag', '#{card_type}')")
+  end
 end
 
-When(/^I search for cards with "(.*)"$/) do |text|
+When(/^I search for cards with keywords "(.*)"$/) do |keywords|
   find('#cardtext')
-  execute_script("$('#cardtext').tagit('createTag', '#{text}')")
+  keywords.split(',').each do |keyword|
+    execute_script("$('#cardtext').tagit('createTag', '#{keyword}')")
+  end
 end
 
 When(/^I search for cards with colors "(.*)"$/) do |colors|
@@ -115,15 +119,19 @@ Then(/^I will see the card named "(.*)"$/) do |card_name|
   expect(page).to have_content(card_name)
 end
 
-Then(/^I will see cards with the type "(.*)"$/) do |card_type|
-  search_results.each do |card|
-    expect(card.types.pluck(:name)).to include(card_type)
+Then(/^I will see cards with the types "(.*)"$/) do |card_types|
+  card_types.split(',').each do |card_type|
+    search_results.each do |card|
+      expect(card.types.pluck(:name)).to include(card_type)
+    end
   end
 end
 
-Then(/^I will see cards with "(.*)"$/) do |text|
-  search_results.each do |card|
-    expect(card.text).to include(text)
+Then(/^I will see cards with keywords "(.*)"$/) do |keywords|
+  keywords.split(',').each do |keyword|
+    search_results.each do |card|
+      expect(card.text).to include(keyword)
+    end
   end
 end
 

@@ -24,32 +24,29 @@ Feature: Search cards
   Scenario: Search for cards by type
     Given there is a card with type "creature" in the database
     And I visit the card search page
-    When I search for cards with type "creature"
-    Then I will see cards with the type "creature"
+    When I search for cards with types "creature"
+    Then I will see cards with the types "creature"
 
   @javascript
   Scenario: Search for cards that have two types
     Given there is a card with types "creature,artifact" in the database
     And I visit the card search page
-    When I search for cards with type "creature"
-      And I search for cards with type "artifact"
-    Then I will see cards with the type "creature"
-      And I will see cards with the type "artifact"
+    When I search for cards with types "creature,artifact"
+    Then I will see cards with the types "creature,artifact"
 
   @javascript
   Scenario: Search for cards by text
     Given there is a card with "flying"
     And I visit the card search page
-    When I search for cards with "flying"
-    Then I will see cards with "flying"
+    When I search for cards with keywords "flying"
+    Then I will see cards with keywords "flying"
 
   @javascript
   Scenario: Search for cards by multiple text keywords
     Given there is a card with "flying, deathtouch"
     And I visit the card search page
-    When I search for cards with "flying"
-      And I search for cards with "deathtouch"
-    Then I will see cards with "flying, deathtouch"
+    When I search for cards with keywords "flying,deathtouch"
+    Then I will see cards with keywords "flying, deathtouch"
 
   @javascript
   Scenario: Search by card color
