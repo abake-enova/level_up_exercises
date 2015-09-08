@@ -98,6 +98,7 @@ end
 When(/^I search for cards with converted mana cost greater than or equal to (.*)$/) do |cmc|
   fill_in "minmana", with: cmc
   find("#minmana", match: :first).native.send_keys(:return)
+  binding.pry
 end
 
 When(/^I search for cards with converted mana cost less than or equal to (.*)$/) do |cmc|
