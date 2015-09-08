@@ -2,8 +2,15 @@ def check_colors_checkboxes(colors)
   colors.split(',').each { |color| find("label[for='#{color}']", match: :first).click }
 end
 
+# TODO: Figure out why this fails randomly.
 def search_results
   Card.where(id: all('tr.card').map { |elem| elem['data-card-id'] })
+end
+
+# TODO: Find a better way to do this. This is sorta terrible.
+def reload_search_results
+  execute_script('$(\'input[name="page"]\').val("1");')
+  execute_script('$.get($("#card-search").attr("action"), $("#card-search").serialize(), null, "script");')
 end
 
 Given(/^there are (.+) cards in the database$/) do |n|
@@ -94,21 +101,22 @@ When(/^I search for pherexian mana cards$/) do
   check "pherexian"
 end
 
-# TODO: Fix cmc tests.
 When(/^I search for cards with converted mana cost greater than or equal to (.*)$/) do |cmc|
-  fill_in "minmana", with: cmc
-  find("#minmana", match: :first).native.send_keys(:return)
-  binding.pry
+  cmc = cmc.to_i
+  find("#minmana", match: :first).set(cmc)
+  reload_search_results
 end
 
 When(/^I search for cards with converted mana cost less than or equal to (.*)$/) do |cmc|
-  fill_in "maxmana", with: cmc
-  find("#maxmana", match: :first).native.send_keys(:return)
+  cmc = cmc.to_i
+  find("#maxmana", match: :first).set(cmc)
+  reload_search_results
 end
 
 When(/^I search for cards with converted mana cost equal to (.*)$/) do |cmc|
-  fill_in "exactmana", with: cmc
-  find("#exactmana", match: :first).native.send_keys(:return)
+  cmc = cmc.to_i
+  find("#exactmana", match: :first).set(cmc)
+  reload_search_results
 end
 
 Then(/^I will see the tooltip for that card$/) do
@@ -167,18 +175,21 @@ Then(/^I will only see cards with pherexian mana$/) do
 end
 
 Then(/^I will only see cards with converted mana cost greater than or equal to (.*)$/) do |cmc|
+  cmc = cmc.to_i
   search_results.each do |card|
     expect(card.cmc).to be >= cmc
   end
 end
 
 Then(/^I will only see cards with converted mana cost less than or equal to (.*)$/) do |cmc|
+  cmc = cmc.to_i
   search_results.each do |card|
     expect(card.cmc).to be <= cmc
   end
 end
 
 Then(/^I will only see cards with converted mana cost equal to (.*)$/) do |cmc|
+  cmc = cmc.to_i
   search_results.each do |card|
     expect(card.cmc).to eq(cmc)
   end
