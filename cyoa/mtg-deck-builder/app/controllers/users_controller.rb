@@ -10,12 +10,7 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
-  def edit
-    @user = current_user
-  end
-
   def update
-    @user = current_user
     if @user.update(user_params)
       success_message = "Awesome! Your profile has been updated."
       redirect_to @user, flash: { success: success_message }
@@ -55,5 +50,6 @@ class UsersController < ApplicationController
     unless logged_in?
       redirect_to login_url, flash: { error: "Oops! You need to log in." }
     end
+    @user = current_user
   end
 end
