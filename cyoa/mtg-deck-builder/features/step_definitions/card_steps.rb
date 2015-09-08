@@ -1,3 +1,8 @@
+def find_excluded_colors(included_colors)
+  all_colors = %w(black blue green red white)
+  all_colors - included_colors
+end
+
 def check_colors_checkboxes(colors)
   colors.split(',').each { |color| find("label[for='#{color}']", match: :first).click }
 end
@@ -149,9 +154,10 @@ Then(/^I will see cards with colors "(.*)"$/) do |colors|
   end
 end
 
-Then(/^I will not see cards with colors "(.*)"$/) do |colors|
+Then(/^I will only see cards with colors "(.*)"$/) do |colors|
+  excluded_colors = find_excluded_colors(colors.split(','))
   search_results.each do |card|
-    colors.split(',').each { |color| expect(card.colors).to_not include(color) }
+    excluded_colors.split(',').each { |color| expect(card.colors).to_not include(color) }
   end
 end
 

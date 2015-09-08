@@ -68,7 +68,7 @@ Feature: Search cards
     And I visit the card search page
     When I search for cards with only colors "blue"
     Then I will see cards with colors "blue"
-      And I will not see cards with colors "black,green,red,white"
+      And I will only see cards with colors "blue"
 
   @javascript
   Scenario: Search by multicolor
