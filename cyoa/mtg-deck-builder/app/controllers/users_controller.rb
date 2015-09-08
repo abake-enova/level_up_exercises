@@ -43,7 +43,8 @@ class UsersController < ApplicationController
       :email,
       :username,
       :password,
-      :password_confirmation)
+      :password_confirmation
+    )
   end
 
   def require_logged_in
