@@ -16,6 +16,11 @@ def create_deck
   @deck = create(:deck, user: @user)
 end
 
+Given(/^I am editing my deck$/) do
+  create_deck
+  edit_deck(@deck)
+end
+
 When(/^I create a deck named (.*)$/) do |deck_name|
   fill_in 'deck[name]', with: deck_name
   click_button 'Create New Deck'
@@ -28,18 +33,8 @@ When(/^I destroy the deck named (.*)$/) do |deck_name|
   find(selector, match: :first).click
 end
 
-Then(/^I expect to not have a deck named (.*)$/) do |deck_name|
-  visit(user_path(@user))
-  expect(find(".user-decks", match: :first)).to_not have_content(deck_name)
-end
-
 When(/^I visit the create deck page$/) do
   visit("/decks/new")
-end
-
-Then(/^I expect to have (.*) deck named (.*)$/) do |n, deck_name|
-  expect(@user.decks.count).to eq(1)
-  expect(@user.decks.first.name).to eq(deck_name)
 end
 
 When(/^I create a deck$/) do
@@ -56,6 +51,16 @@ end
 
 When(/^I remove a card with id (.*)$/) do |card_id|
   remove_card(card_id)
+end
+
+Then(/^I expect to not have a deck named (.*)$/) do |deck_name|
+  visit(user_path(@user))
+  expect(find(".user-decks", match: :first)).to_not have_content(deck_name)
+end
+
+Then(/^I expect to have (.*) deck named (.*)$/) do |n, deck_name|
+  expect(@user.decks.count).to eq(1)
+  expect(@user.decks.first.name).to eq(deck_name)
 end
 
 Then(/^I expect to have (.*) cards in my deck$/) do |n|

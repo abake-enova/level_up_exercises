@@ -20,24 +20,21 @@ Feature: Create/Edit decks
 
   @javascript
   Scenario: Add a card to deck
-    Given I create a deck
-    And I visit the edit deck page
+    Given I am editing my deck
     When I add a card with id 1
     Then I expect to have 1 cards in my deck
       And I expect to have a card with id 1 in my deck
 
   @javascript
   Scenario: Remove 1 card from deck
-    Given I create a deck
-    And I visit the edit deck page
+    Given I am editing my deck
     And I add a card with id 1
     When I remove a card with id 1
     Then I expect to have 0 cards in my deck
 
   @javascript
   Scenario: Add different cards to deck
-    Given I create a deck
-    And I visit the edit deck page
+    Given I am editing my deck
     When I add a card with id 1
       And I add a card with id 2
     Then I expect to have 2 cards in my deck
@@ -46,8 +43,7 @@ Feature: Create/Edit decks
 
   @javascript
   Scenario: Add different cards to deck and remove only one of them
-    Given I create a deck
-    And I visit the edit deck page
+    Given I am editing my deck
     And I add a card with id 1
     And I add a card with id 2
     When I remove a card with id 1
