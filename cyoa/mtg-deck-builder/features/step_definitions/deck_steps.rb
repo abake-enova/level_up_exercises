@@ -8,7 +8,7 @@ def add_card(card_id)
 end
 
 def add_random_card_to_deck
-  card_id = Card.offset(rand(Card.count)).first.id
+  card_id = @cards.sample.id
   add_card(card_id)
   @added_cards << card_id
   @added_card = card_id
